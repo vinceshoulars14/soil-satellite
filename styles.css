@@ -323,7 +323,8 @@ input {
 @media (max-width: 1120px) {
   .hero,
   .main-layout,
-  .map-grid {
+  .map-grid,
+  .explanation-grid {
     grid-template-columns: 1fr;
   }
 
