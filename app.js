@@ -7,17 +7,45 @@ const DEFAULT_VIEW_BOUNDS = [
 ];
 
 const DATASETS = {
-  soil: {
+  surfaceSoil: {
     id: "SMAP_L4_Analyzed_Surface_Soil_Moisture",
     title: "SMAP L4 Surface Soil Moisture",
+    subtitle: "NASA SMAP L4 analyzed soil moisture for the top 0-5 cm",
+    maxNativeZoom: 8,
+  },
+  rootZoneSoil: {
+    id: "SMAP_L4_Analyzed_Root_Zone_Soil_Moisture",
+    title: "SMAP L4 Root-Zone Soil Moisture",
+    subtitle: "NASA SMAP L4 analyzed root-zone moisture for the top 0-100 cm",
+    maxNativeZoom: 8,
+  },
+  surfaceUncertainty: {
+    id: "SMAP_L4_Uncertainty_Analyzed_Surface_Soil_Moisture",
+    title: "SMAP L4 Surface Moisture Uncertainty",
+    subtitle: "NASA SMAP L4 uncertainty for the analyzed 0-5 cm moisture layer",
+    maxNativeZoom: 8,
+  },
+  rootZoneUncertainty: {
+    id: "SMAP_L4_Uncertainty_Analyzed_Root_Zone_Soil_Moisture",
+    title: "SMAP L4 Root-Zone Moisture Uncertainty",
+    subtitle: "NASA SMAP L4 uncertainty for the analyzed 0-100 cm moisture layer",
     maxNativeZoom: 8,
   },
   vegetation: {
     id: "MODIS_Terra_L3_NDVI_16Day",
     title: "MODIS Terra NDVI 16-Day",
+    subtitle: "NASA MODIS Terra NDVI 16-day vegetation index",
     maxNativeZoom: 9,
   },
 };
+
+const MAP_CONFIGS = [
+  { elementId: "surfaceSoilMap", dataset: DATASETS.surfaceSoil },
+  { elementId: "rootZoneSoilMap", dataset: DATASETS.rootZoneSoil },
+  { elementId: "surfaceUncertaintyMap", dataset: DATASETS.surfaceUncertainty },
+  { elementId: "rootZoneUncertaintyMap", dataset: DATASETS.rootZoneUncertainty },
+  { elementId: "vegetationMap", dataset: DATASETS.vegetation },
+];
 
 const state = {
   selectedAreaLabel: "Continental United States",
@@ -40,17 +68,20 @@ const elements = {
   maxLon: document.querySelector("#maxLon"),
 };
 
-const soilMap = createMap("soilMap");
-const vegetationMap = createMap("vegetationMap");
-const maps = [soilMap, vegetationMap];
+const maps = MAP_CONFIGS.map(({ elementId, dataset }) => {
+  const map = createMap(elementId);
+  map.datasetConfig = dataset;
+  return map;
+});
 
 let syncingMaps = false;
 
 initialize();
 
 async function initialize() {
-  addSatelliteLayer(soilMap, DATASETS.soil);
-  addSatelliteLayer(vegetationMap, DATASETS.vegetation);
+  maps.forEach((map) => {
+    addSatelliteLayer(map, map.datasetConfig);
+  });
   fitAllMapsToBounds(DEFAULT_VIEW_BOUNDS);
   syncMaps();
   updateRefreshedTimestamp();
@@ -251,8 +282,9 @@ function startRefreshTimer(interval) {
   elements.refreshStatus.textContent = `Auto-refresh is on and checks every ${minutes} minute${minutes === 1 ? "" : "s"}.`;
 
   state.refreshTimerId = window.setInterval(() => {
-    addSatelliteLayer(soilMap, DATASETS.soil);
-    addSatelliteLayer(vegetationMap, DATASETS.vegetation);
+    maps.forEach((map) => {
+      addSatelliteLayer(map, map.datasetConfig);
+    });
     updateRefreshedTimestamp();
   }, interval);
 }
