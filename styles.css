@@ -218,6 +218,15 @@ input {
   border: 1px solid rgba(21, 48, 40, 0.12);
 }
 
+.legend-image {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  border-radius: 12px;
+  border: 1px solid rgba(21, 48, 40, 0.12);
+  background: rgba(255, 255, 255, 0.92);
+}
+
 .moisture-bar {
   background: linear-gradient(90deg, #d58d32 0%, #efe381 40%, #8fd7f1 72%, #2154ae 100%);
 }
@@ -243,7 +252,7 @@ input {
 
 .map-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 18px;
 }
 
@@ -308,7 +317,7 @@ input {
 }
 
 .map-frame {
-  min-height: 520px;
+  min-height: 420px;
   border-top: 1px solid var(--border);
 }
 

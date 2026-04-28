@@ -32,9 +32,10 @@
           <p class="eyebrow">NASA satellite data on a live webpage</p>
           <h1>Real-time soil moisture and green cover over any country or grid area</h1>
           <p class="intro">
-            This dashboard compares NASA SMAP surface soil moisture with MODIS NDVI green
-            cover imagery. Pick a country or type a custom latitude/longitude box to zoom
-            into the same area on both live satellite layers.
+            This dashboard compares NASA SMAP surface moisture, root-zone moisture, and
+            moisture uncertainty layers with MODIS NDVI green cover imagery. Pick a country
+            or type a custom latitude/longitude box to zoom into the same area on every live
+            satellite layer.
           </p>
         </div>
         <div class="hero-stats">
@@ -108,9 +109,31 @@
           <section class="panel-section">
             <h2>What the colors mean</h2>
             <div class="legend-group">
-              <h3>Soil moisture</h3>
-              <div class="legend-bar moisture-bar"></div>
-              <p class="detail">Drier soil trends toward yellow-orange. Wetter soil trends toward blue.</p>
+              <h3>Soil moisture metric scale</h3>
+              <img
+                class="legend-image"
+                src="https://gibs.earthdata.nasa.gov/legends/SMAP_Analyzed_Soil_Moisture_H.png"
+                alt="NASA SMAP analyzed soil moisture legend showing volumetric water content values in cubic meters per cubic meter"
+              />
+              <p class="detail">
+                NASA GIBS reports the moisture colors in volumetric water content
+                (<code>m3/m3</code>). Yellow-orange indicates drier soil, while lighter to
+                deeper blue marks wetter soil. The same legend is used for both the 0-5 cm
+                surface layer and the 0-100 cm root-zone layer.
+              </p>
+            </div>
+            <div class="legend-group">
+              <h3>Soil moisture uncertainty</h3>
+              <img
+                class="legend-image"
+                src="https://gibs.earthdata.nasa.gov/legends/SMAP_Uncertainty_Analyzed_Soil_Moisture_H.png"
+                alt="NASA SMAP soil moisture uncertainty legend"
+              />
+              <p class="detail">
+                Lower uncertainty means the moisture estimate is more stable for that area and
+                time step. Higher values flag places where the modeled soil moisture estimate
+                deserves more caution.
+              </p>
             </div>
             <div class="legend-group">
               <h3>Green cover (NDVI)</h3>
@@ -124,6 +147,12 @@
             <p class="detail">
               Soil moisture uses NASA Earthdata GIBS layer
               <code>SMAP_L4_Analyzed_Surface_Soil_Moisture</code>.
+            </p>
+            <p class="detail">
+              Added SMAP comparison layers include
+              <code>SMAP_L4_Analyzed_Root_Zone_Soil_Moisture</code>,
+              <code>SMAP_L4_Uncertainty_Analyzed_Surface_Soil_Moisture</code>, and
+              <code>SMAP_L4_Uncertainty_Analyzed_Root_Zone_Soil_Moisture</code>.
             </p>
             <p class="detail">
               Green cover uses NASA Earthdata GIBS layer
@@ -150,10 +179,34 @@
           <div class="map-grid">
             <article class="map-card">
               <div class="map-card-header">
-                <h2>Soil moisture</h2>
-                <p>NASA SMAP L4 analyzed surface soil moisture</p>
+                <h2>Surface soil moisture</h2>
+                <p>NASA SMAP L4 analyzed soil moisture for the top 0-5 cm</p>
               </div>
-              <div id="soilMap" class="map-frame" aria-label="Soil moisture map"></div>
+              <div id="surfaceSoilMap" class="map-frame" aria-label="Surface soil moisture map"></div>
+            </article>
+
+            <article class="map-card">
+              <div class="map-card-header">
+                <h2>Root-zone soil moisture</h2>
+                <p>NASA SMAP L4 analyzed root-zone moisture for the top 0-100 cm</p>
+              </div>
+              <div id="rootZoneSoilMap" class="map-frame" aria-label="Root-zone soil moisture map"></div>
+            </article>
+
+            <article class="map-card">
+              <div class="map-card-header">
+                <h2>Surface moisture uncertainty</h2>
+                <p>NASA SMAP L4 uncertainty for the analyzed 0-5 cm moisture layer</p>
+              </div>
+              <div id="surfaceUncertaintyMap" class="map-frame" aria-label="Surface moisture uncertainty map"></div>
+            </article>
+
+            <article class="map-card">
+              <div class="map-card-header">
+                <h2>Root-zone moisture uncertainty</h2>
+                <p>NASA SMAP L4 uncertainty for the analyzed 0-100 cm moisture layer</p>
+              </div>
+              <div id="rootZoneUncertaintyMap" class="map-frame" aria-label="Root-zone moisture uncertainty map"></div>
             </article>
 
             <article class="map-card">
